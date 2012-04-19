@@ -9,7 +9,7 @@ include_once("$srcdir/invoice_summary.inc.php");
 $host=$sqlconf['host'];
 $login=$sqlconf['login'];
 $pass=$sqlconf['pass'];
-$dbase=$db;
+$dbase=$sqlconf['dbase'];
 $portVal=$sqlconf['port'];
 if(!mysql_connect($host,$login,$pass))
  {
@@ -18,7 +18,7 @@ if(!mysql_connect($host,$login,$pass))
  }
 if(!mysql_select_db($dbase))
  {
-  echo "None of the databases are altered.<br>Reason==>Database emr_database_list doesn't exist.";
+  echo "None of the databases are altered.<br>Reason==>Database $dbase doesn't exist.";
   die;
  }
 $filename='openemr.sql';
@@ -53,7 +53,7 @@ foreach($datbase as $valDB)
     $sqlconf["dbase"] = $valDB;
     $connectionCommonDatabase='';
     
-    $connectionCommonDatabase=sql_connect_specific_db($sqlconf,$valDB);    
+    //$connectionCommonDatabase=sql_connect_specific_db($sqlconf,$valDB);    
     
     $mainlistType='15';
     $sublistType='20';

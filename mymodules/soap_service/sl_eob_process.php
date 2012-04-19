@@ -341,8 +341,22 @@ global $debug,$InsertionId,$paydate,$cred;
 	 }
 	else
 	 {
+            //some modifiers will be changed by the OfficeAlly. they will be returning the new modifier along with the code.
+            //the old modifier which we sent will be returned in segment 6 in the section SVC.
+            //if segment 6 is present, we ignore their modifier and will be considering the modifier from segment 6 in section SVC.
       if ($svc['mod_temp']) $codekey .= ':' . $svc['mod_temp'];
 	 }
+        if(!$rowghgh['encounter'] && !$svc['mod_temp']){
+            //codes entered through the ZH fee sheet will have ':' at the end of modifiers and those entered through OpenEMR fee sheet will not have ':'.
+            //while posting ERA, we are making a check in the billing table if any entry is present for the particular code:modifier obtained from ERA.
+            //in tha case of ZH, we are appending a ':' symbol to the modifier in our parse_era.inc.php file. but in the case of OpenEMR, it is not.
+            //so while checking with the billing table we will have a contradiction. to handle this, we check the code:modifier with and without ':' symbol at the end of modifiers.
+            $svc['mod'] = $svc['mod'].":";
+            $query_modifier = sqlQuery("select * from billing where encounter = '$encounter' and pid='$pid' and activity=1 and code='$codekey' and modifier='".$svc['mod']."'");
+            if($query_modifier['encounter']>0){
+                if ($svc['mod']) $codekey .= ':' . $svc['mod'];
+            }
+        }
 
       $prev = $codes[$codekey];
 
