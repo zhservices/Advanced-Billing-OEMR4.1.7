@@ -1345,13 +1345,13 @@ $GLOBALS_METADATA = array(
       xl('Do not display Medications uploaded to NewCrop')
     ),
 	
-    'erx_allergy_display' => array(
+	'erx_allergy_display' => array(
       xl('Do not display Allergy uploaded to NewCrop'),
       'bool',                           // data type
       '0',
       xl('Do not display Allergy uploaded to NewCrop')
     ),
-    
+        
     'erx_default_patient_country' => array(
         xl('Default Patient Country'),
         array(
@@ -1385,6 +1385,5 @@ $GLOBALS_METADATA = array(
       xl('External Module Site Address.')
     ),
   ),
-  
 );
 ?>
