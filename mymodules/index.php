@@ -132,6 +132,31 @@ require_once(dirname(__FILE__)."/../interface/globals.php");
 	 }
       }
    }
+   $mainCode = 'ENCOUNTER';
+   $subCode = 'ENCT_DELETE';
+   $main = sqlQuery("SELECT cl_list_slno FROM customlists WHERE cl_list_item_short IN ('".$mainCode."') AND cl_list_type IN ('15')");
+   $sub = sqlQuery("SELECT cl_list_slno FROM customlists WHERE cl_list_item_short IN ('".$subCode."') AND cl_list_type IN ('20')");
+   $checkDeleted = sqlStatement("SELECT pid,encounter,am_pid,am_encounter,fe.date FROM arr_master AS ar LEFT JOIN form_encounter AS fe
+			    ON ar.am_encounter=fe.encounter WHERE encounter IS NULL AND am_currentstatus!='".$sub['cl_list_slno']."'");
+   if(sqlNumRows($checkDeleted) > 0){
+       while($checkDeletedRow = sqlFetchArray($checkDeleted)){
+	$pid = $checkDeletedRow['am_pid'];
+	$encounter = $checkDeletedRow['am_encounter'];
+	    $count=sqlQuery("SELECT ac_count FROM arr_status WHERE ac_pid='".$pid."' AND ac_encounter='".$encounter."' AND ac_status='".$sub['cl_list_slno']."' ORDER BY ac_id DESC LIMIT 1");
+	    if(!$count['ac_count']) $count['ac_count']=0;
+	    $statusId = sqlInsert("INSERT INTO arr_status (ac_uid,ac_pid,ac_encounter,ac_master_status,ac_status,ac_count,ac_comment,ac_reason) VALUES ('".$_SESSION['authId']."','".$pid."','".$encounter."','".$main['cl_list_slno']."','".$sub['cl_list_slno']."','".$count['ac_count']."','".$comment."','".$reason."')");
+	    $master = sqlQuery("select am_id from arr_master where am_pid='$pid' and am_encounter='$encounter'");
+	    $masterId = $master['am_id'];
+	    if($masterId != '' && $masterId != 0){
+		sqlQuery("UPDATE arr_master SET am_statustrack='".$statusId."', am_currentstatus='".$sub['cl_list_slno']."' WHERE am_pid='".$pid."' AND am_encounter='".$encounter."'");
+	    }
+	    else{
+		$masterId = sqlInsert("INSERT INTO arr_master (am_uid,am_pid,am_encounter,am_statustrack,am_currentstatus,am_ins1,am_ins2,am_ins3,am_inslevel) VALUES ('".$_SESSION['authId']."','".$pid."','".$encounter."','".$statusId."','".$sub['cl_list_slno']."','$am_ins1','$am_ins2','$am_ins3','$am_inslevel')");
+	    }
+	    sqlQuery("UPDATE arr_status SET ac_arr_id='".$masterId."' WHERE ac_pid='".$pid."' AND ac_encounter='".$encounter."'");
+       }
+   }
+   
     foreach($_GET as $key=>$value){
     ?>
     <input type="hidden" name="<?php echo $key;?>" value="<?php echo $value;?>">
