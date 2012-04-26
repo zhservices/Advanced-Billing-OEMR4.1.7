@@ -203,14 +203,29 @@ class eob{
     }
     public function get_pdf_details($data)
     {
-        list($cred,$dat)=$data;
+        list($cred,$dat,$pat_bal_summary)=$data;
         if(UserService::valid($cred)){
             $where = '';
-            $wherearray=array();
-            foreach($dat as $k=>$v)
-            {
-                $where .= " OR f.id = ?";
-                $wherearray[]=$v;
+            $wherearray = array();
+            if($pat_bal_summary){
+                foreach($dat as $k => $v){
+                    $arr = array();
+                    if(strpos($v,'|'))
+                        $arr = explode('|',$v);
+                    else
+                        $arr[] = $v;
+                    foreach($arr as  $key6 => $value6){
+                        $where .= " OR f.id = ?";
+                        $wherearray[]=$arr[$key6];
+                    }
+                }
+            }
+            else{
+                foreach($dat as $k=>$v)
+                {
+                    $where .= " OR f.id = ?";
+                    $wherearray[]=$v;
+                }
             }
             $where = substr($where, 4);
             if(!$where)
@@ -230,7 +245,7 @@ class eob{
                 "LEFT JOIN insurance_data AS idat ON idat.pid=f.pid ".
                 "WHERE ( $where) AND " .
                 "p.pid = f.pid " .
-                "GROUP BY f.pid ".
+                "GROUP BY f.pid,f.encounter ".
                 "ORDER BY f.pid,f.billing_facility, f.date desc, f.encounter desc";
             $resQ1 = sqlStatement($query1,$wherearray);
             $resultSet = array();
@@ -289,6 +304,42 @@ class eob{
                 $i++;
             }
             return $resultSet;
+        }
+    }
+    public function get_patient_summary($data){
+        list($cred,$query2,$queryGlobals,$pat_bal_summary)=$data;
+        if(UserService::valid($cred)){
+            $res = sqlStatement($query2);
+            $pat_bal_result = array();
+            while ($row = sqlFetchArray($res)) {
+                
+                $pat_bal_result[$row['pid']]['ar_responsible_party'] = ar_responsible_party($row['pid'], $row['encounter']);
+                
+                if($pat_bal_result[$row['pid']]['ar_responsible_party'] == 0 || !$pat_bal_summary){
+
+                    $balance = sprintf("%.2f", $row['charges'] + $row['copays']  - $row['copays_ar'] - $row['payments'] - $row['adjustments']);
+                    $pat_bal_result[$row['pid']]['charges'] += $row['charges'];
+                    $pat_bal_result[$row['pid']]['copays'] += $row['copays'];
+                    $pat_bal_result[$row['pid']]['copays_ar'] += $row['copays_ar'];
+                    $pat_bal_result[$row['pid']]['payments'] += $row['payments'];
+                    $pat_bal_result[$row['pid']]['adjustments'] += $row['adjustments'];
+                    $pat_bal_result[$row['pid']]['count'] = $pat_bal_result[$row['pid']]['count'] ? $pat_bal_result[$row['pid']]['count']+1 : 1;
+                    $pat_bal_result[$row['pid']]['balance'] += $balance;
+                    $pat_bal_result[$row['pid']]['fname'] = $row['fname'];
+                    $pat_bal_result[$row['pid']]['mname'] = $row['mname'];
+                    $pat_bal_result[$row['pid']]['lname'] = $row['lname'];
+                    $pat_bal_result[$row['pid']]['pubpid'] = $row['pubpid'];
+                    $pat_bal_result[$row['pid']]['pid'] = $row['pid'];
+                    if($pat_bal_result[$row['pid']]['id_val'])
+                        $pat_bal_result[$row['pid']]['id_val'] .= "|";
+                    $pat_bal_result[$row['pid']]['id_val'] .= $row['id'];
+                }
+                
+            }
+            if($queryGlobals){
+                $glob = sqlQuery($queryGlobals);
+            }
+            return array($pat_bal_result,$glob['gl_value']);
         }
     }
 }

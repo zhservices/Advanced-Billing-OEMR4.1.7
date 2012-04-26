@@ -1010,6 +1010,15 @@ public function report_deleted($data)
 	    return $directory_list;
 	}
     }
+    public function update_x12_cred($data){
+	if($this->valid($data[0])){
+	    list($cred,$id,$username,$pasword) = $data;
+	    $username = base64_decode($username);
+	    $pasword = base64_decode($pasword);
+	    sqlQuery("update x12_partners set x12_username=? , x12_password=? where id=?",array($username,$pasword,$id));
+	    return true;
+	}
+    }
 }
 //$server = new SoapServer(null,array('uri' => "urn://portal/res"));
 //$server->setClass('UserService');

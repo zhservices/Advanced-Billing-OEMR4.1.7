@@ -72,7 +72,10 @@ class FileParse extends eob
 		    fwrite($fERA,base64_decode($row['message']));
 		    fclose($fERA);
                     $file="$path/$newfile_name";
-                    $era_det_id=$this->sqlExecuteDB($con,"replace into era_details (check_number,check_amount,payer_name,filename,data) values ('".$row['check_number']."','".$row['check_amount']."','".$row['payer_name']."','".$newfile_name."','".mysql_real_escape_string(base64_decode($row['message']))."')","mysql_insert_id");
+		    $check_chkno = sqlStatement("select * from era_details where check_number='".$row['check_number']."'");
+		    $era_det_id = '';
+		    if(sqlNumRows($check_chkno)==0)
+			$era_det_id=$this->sqlExecuteDB($con,"replace into era_details (check_number,check_amount,payer_name,filename,data) values ('".$row['check_number']."','".$row['check_amount']."','".$row['payer_name']."','".$newfile_name."','".mysql_real_escape_string(base64_decode($row['message']))."')","mysql_insert_id");
 		    $this->sqlExecuteDB($con,"update x12_partners set last_download_date=NOW() where x12_username='".$row['uname']."'");
 		    $updated_accounts[$level]['uname']=$row['uname'];
 		    $updated_accounts[$level]['site_folder']=$row['site_folder'];
