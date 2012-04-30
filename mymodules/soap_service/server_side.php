@@ -583,7 +583,7 @@ class UserService Extends FeeSheet
 		$empty_name=$var['empty_name'];
 		$class=$var['class'];
 		$onchange=$var['onchange'];
-	        $x['generate_select_list']=generate_select_list($tag_name,$list_id,$currvalue,$title,$empty_name,$class,$onchange);
+		$x['generate_select_list']=generate_select_list($tag_name,$list_id,$currvalue,$title,$empty_name,$class,$onchange);
 		return $x;
 	 }
 	elseif($func=='arGetPayerID')
@@ -595,6 +595,22 @@ class UserService Extends FeeSheet
 	    $x['arGetPayerID']=arGetPayerID($patient_id,$date_of_service,$payer_type);
 	    return $x;
 	 }
+	elseif($func=='get_policy_types'){
+	    $policy_types = array(
+		''   => xl('N/A'),
+		'12' => xl('Working Aged Beneficiary or Spouse with Employer Group Health Plan'),
+		'13' => xl('End-Stage Renal Disease Beneficiary in MCP with Employer`s Group Plan'),
+		'14' => xl('No-fault Insurance including Auto is Primary'),
+		'15' => xl('Worker`s Compensation'),
+		'16' => xl('Public Health Service (PHS) or Other Federal Agency'),
+		'41' => xl('Black Lung'),
+		'42' => xl('Veteran`s Administration'),
+		'43' => xl('Disabled Beneficiary Under Age 65 with Large Group Health Plan (LGHP)'),
+		'47' => xl('Other Liability Insurance is Primary'),
+	    );
+	    $x[]=$policy_types;
+	    return $x;
+	}
 	elseif($func=='xl_layout_label')
 	 {
 		$constant=$var['constant'];
@@ -664,7 +680,136 @@ class UserService Extends FeeSheet
 		 }
 		$parameters[12]=fixDate($parameters[12]);
 		$parameters[27]=fixDate($parameters[27]);
-		call_user_func_array('newInsuranceData',$parameters);
+
+		list($bl0,$pid,$type,$provider,$policy_number,$group_number,$plan_name,$subscriber_lname,$subscriber_mname,
+		     $subscriber_fname,$subscriber_relationship,$subscriber_ss,$subscriber_DOB,$subscriber_street,$subscriber_postal_code,
+		     $subscriber_city,$subscriber_state,$subscriber_country,$subscriber_phone,$subscriber_employer,$subscriber_employer_street,
+		     $subscriber_employer_city,$subscriber_employer_postal_code,$subscriber_employer_state,$subscriber_employer_country,$copay,
+		     $subscriber_sex,$effective_date,$accept_assignment,$bl1,$bl2,$bl3,$bl4,$auth_required,$msp_category,$policy_type)=$parameters;
+		$accept_assignment = $accept_assignment ? $accept_assignment : "TRUE";
+		$effective_date = $effective_date ? $effective_date : "0000-00-00";
+		$auth_required = $parameters['33'] ? $parameters['33'] : "0";
+		if($GLOBALS['msp_capturing_payment_screen']){
+		$msp_category = $parameters['34'] ? $parameters['34'] : null;
+		$policy_type = $parameters['35'] ? $parameters['35'] : "";
+		}
+		if (strlen($type) <= 0) return FALSE;
+
+		// If a bad date was passed, err on the side of caution.
+		$effective_date = fixDate($effective_date, date('Y-m-d'));
+	      
+		$idres = sqlStatement("SELECT * FROM insurance_data WHERE " .
+		  "pid = '$pid' AND type = '$type' ORDER BY date DESC");
+		$idrow = sqlFetchArray($idres);
+		// Replace the most recent entry in any of the following cases:
+		// * Its effective date is >= this effective date.
+		// * It is the first entry and it has no (insurance) provider.
+		// * There is no encounter that is earlier than the new effective date but
+		//   on or after the old effective date.
+		// Otherwise insert a new entry.
+
+		$replace = false;
+		if ($idrow) {
+		  if (strcmp($idrow['date'], $effective_date) > 0) {
+		    $replace = true;
+		  }
+		  else {
+		    if (!$idrow['provider'] && !sqlFetchArray($idres)) {
+		      $replace = true;
+		    }
+		    else {
+		      $ferow = sqlQuery("SELECT count(*) AS count FROM form_encounter " .
+			"WHERE pid = '$pid' AND date < '$effective_date 00:00:00' AND " .
+			"date >= '" . $idrow['date'] . " 00:00:00'");
+		      if ($ferow['count'] == 0) $replace = true;
+		    }
+		  }
+		}
+
+		if ($replace) {
+	      
+		  // TBD: This is a bit dangerous in that a typo in entering the effective
+		  // date can wipe out previous insurance history.  So we want some data
+		  // entry validation somewhere.
+		  sqlStatement("DELETE FROM insurance_data WHERE " .
+		    "pid = '$pid' AND type = '$type' AND date >= '$effective_date' AND " .
+		    "id != " . $idrow['id']);
+	      
+		  $data = array();
+		  $data['type'] = $type;
+		  $data['provider'] = $provider;
+		  $data['policy_number'] = $policy_number;
+		  $data['group_number'] = $group_number;
+		  $data['plan_name'] = $plan_name;
+		  $data['subscriber_lname'] = $subscriber_lname;
+		  $data['subscriber_mname'] = $subscriber_mname;
+		  $data['subscriber_fname'] = $subscriber_fname;
+		  $data['subscriber_relationship'] = $subscriber_relationship;
+		  $data['subscriber_ss'] = $subscriber_ss;
+		  $data['subscriber_DOB'] = $subscriber_DOB;
+		  $data['subscriber_street'] = $subscriber_street;
+		  $data['subscriber_postal_code'] = $subscriber_postal_code;
+		  $data['subscriber_city'] = $subscriber_city;
+		  $data['subscriber_state'] = $subscriber_state;
+		  $data['subscriber_country'] = $subscriber_country;
+		  $data['subscriber_phone'] = $subscriber_phone;
+		  $data['subscriber_employer'] = $subscriber_employer;
+		  $data['subscriber_employer_city'] = $subscriber_employer_city;
+		  $data['subscriber_employer_street'] = $subscriber_employer_street;
+		  $data['subscriber_employer_postal_code'] = $subscriber_employer_postal_code;
+		  $data['subscriber_employer_state'] = $subscriber_employer_state;
+		  $data['subscriber_employer_country'] = $subscriber_employer_country;
+		  $data['copay'] = $copay;
+		  $data['subscriber_sex'] = $subscriber_sex;
+		  $data['pid'] = $pid;
+		  $data['date'] = $effective_date;
+		  $data['accept_assignment'] = $accept_assignment;
+		  $data['auth_required'] = $auth_required;
+		  if($GLOBALS['msp_capturing_payment_screen']){
+		  $data['msp_category'] = $msp_category;
+		  $data['policy_type'] = $policy_type;
+		  }
+		  updateInsuranceData($idrow['id'], $data);
+		}
+		else {
+		    $msp = " ";
+		    if($GLOBALS['msp_capturing_payment_screen']){
+		    $msp = ",msp_category = '$msp_category',policy_type = '$policy_type'";
+		    }
+		  sqlInsert("INSERT INTO insurance_data SET
+		    type = '$type',
+		    provider = '$provider',
+		    policy_number = '$policy_number',
+		    group_number = '$group_number',
+		    plan_name = '$plan_name',
+		    subscriber_lname = '$subscriber_lname',
+		    subscriber_mname = '$subscriber_mname',
+		    subscriber_fname = '$subscriber_fname',
+		    subscriber_relationship = '$subscriber_relationship',
+		    subscriber_ss = '$subscriber_ss',
+		    subscriber_DOB = '$subscriber_DOB',
+		    subscriber_street = '$subscriber_street',
+		    subscriber_postal_code = '$subscriber_postal_code',
+		    subscriber_city = '$subscriber_city',
+		    subscriber_state = '$subscriber_state',
+		    subscriber_country = '$subscriber_country',
+		    subscriber_phone = '$subscriber_phone',
+		    subscriber_employer = '$subscriber_employer',
+		    subscriber_employer_city = '$subscriber_employer_city',
+		    subscriber_employer_street = '$subscriber_employer_street',
+		    subscriber_employer_postal_code = '$subscriber_employer_postal_code',
+		    subscriber_employer_state = '$subscriber_employer_state',
+		    subscriber_employer_country = '$subscriber_employer_country',
+		    copay = '$copay',
+		    subscriber_sex = '$subscriber_sex',
+		    pid = '$pid',
+		    date = '$effective_date',
+		    accept_assignment = '$accept_assignment',
+		    auth_required = '$auth_required'
+		    $msp
+		  ");
+		}
+		//call_user_func_array('newInsuranceData',$parameters);
 		$x['ok']='ok';
 		return $x;
 	 }
