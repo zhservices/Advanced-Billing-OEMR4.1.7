@@ -500,7 +500,8 @@ if (isset($_POST["mode"]))
 				     $payer_type = trim(formData("HiddenIns$CountRow"));
 				     $patient_id = trim(formData("HiddenPId$CountRow"));
 				     $encounter_id = trim(formData("HiddenEncounter$CountRow"));
-				     $main = get_main_status_id($connectionFlow,'BILLING');
+					 $emrflowtrack = new emrflowtrack();
+				     $main = $emrflowtrack->get_main_status_id($connectionFlow,'BILLING');
 				     /*if($payer_type==1)
 				     $sub = get_sub_status_id($connectionFlow,'ENCT_REJECTPRI');
 				     elseif($payer_type==2)
@@ -522,7 +523,6 @@ if (isset($_POST["mode"]))
 				     $sub = 'ENCT_REJECTSEC';
 				     elseif($payer_type==3)
 				     $sub = 'ENCT_REJECTTER';
-				     $emrflowtrack = new emrflowtrack();
 				     $emrflowtrack->update_status(array($data[0],$main,$sub,trim(formData("HiddenPId$CountRow" )),trim(formData("HiddenEncounter$CountRow"   )),'BillingPortal:Edit payment denial status'));
 				   }
 				 }
