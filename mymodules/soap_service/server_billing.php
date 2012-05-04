@@ -24,13 +24,13 @@ class Billing extends Payment
             sqlStatement("UPDATE billing SET billed=0, payer_id = '$old_payer_id' WHERE encounter = '$encounter' AND pid='$patient_id' AND activity = 1");
         else
             sqlStatement("UPDATE billing SET billed=0, payer_id = NULL WHERE encounter = '$encounter' AND pid='$patient_id' AND activity = 1");
-        sqlStatement("DELETE FROM claims WHERE patient_id=? AND encounter_id=? ORDER BY `version` DESC LIMIT 1",array($patient_id,$encounter));
+        //sqlStatement("DELETE FROM claims WHERE patient_id=? AND encounter_id=? ORDER BY `version` DESC LIMIT 1",array($patient_id,$encounter));
         return 1;
         }
     }
     public function get_generated_file_content($data)
     {
-        list($cred,$pid_enc,$bn_process_hcfa)=$data;
+        list($cred,$pid_enc,$bn_process_hcfa,$delete)=$data;
         if(UserService::valid($cred)){
         $bat_content='';
         for($i=0;$i<count($pid_enc);$i++)
@@ -47,6 +47,8 @@ class Billing extends Payment
             $payer_type=$pid_enc[$i][2];
             $query="select process_file from claims where patient_id='".$p."' and encounter_id='".$e."' order by bill_time desc limit 1";
             $data=sqlQuery($query);
+            if($delete == "delete")//for fixing view hcfa pdf download.
+            sqlStatement("DELETE FROM claims WHERE patient_id=? AND encounter_id=? ORDER BY `version` DESC LIMIT 1",array($p,$e));
             $file=fopen(dirname(__FILE__)."/../../sites/".$_SESSION['site_id']."/edi/".$data['process_file'],'r');
             $bat_content = fread($file,filesize($GLOBALS['OE_SITE_DIR']."/edi/".$data['process_file']));
             
