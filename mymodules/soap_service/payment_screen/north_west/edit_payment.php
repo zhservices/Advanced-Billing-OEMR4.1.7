@@ -1030,7 +1030,7 @@ return false;
 									$rowPayment = sqlFetchArray($resPayment);
 									$TakebackDB=$rowPayment['pay_amount']*-1;
 									$TakebackDB=$TakebackDB == 0 ? '' : $TakebackDB;
-									$resPayment = sqlStatement("SELECT  adj_amount,grp_code,rsn_code from ar_activity where  session_id ='$payment_id' and
+									$resPayment = sqlStatement("SELECT  adj_amount,grp_code,rsn_code,sequence_no from ar_activity where  session_id ='$payment_id' and
 									pid ='$PId' and  encounter  ='$Encounter' and  code='$Code' and modifier='$Modifier'  and adj_amount!=0");
 									$AdjAmountCount=0;
 									while($rowPayment = sqlFetchArray($resPayment)){
@@ -1039,8 +1039,9 @@ return false;
 									$AdjAmountDB[$AdjAmountCount]=$AdjAmountDB[$AdjAmountCount] == 0 ? '' : $AdjAmountDB[$AdjAmountCount];
 									$AdjGRP[$AdjAmountCount] = $rowPayment['grp_code'];
 									$AdjRSN[$AdjAmountCount] = $rowPayment['rsn_code'];
+									$AdjSeq[$AdjAmountCount] = $rowPayment['sequence_no'];
 									}
-									$resPayment = sqlStatement("SELECT  ded_amount,grp_code,rsn_code,memo from ar_activity where  session_id ='$payment_id' and
+									$resPayment = sqlStatement("SELECT  ded_amount,grp_code,rsn_code,memo,sequence_no from ar_activity where  session_id ='$payment_id' and
 									pid ='$PId' and  encounter  ='$Encounter' and  code='$Code' and modifier='$Modifier'  and (ded_amount!=0 OR memo LIKE 'Deductable%')");
 									$DedAmountCount=0;
 									while($rowPayment = sqlFetchArray($resPayment)){
@@ -1052,6 +1053,7 @@ return false;
 									$DedAmountDB[$DedAmountCount]=$DedAmountDB[$DedAmountCount] == 0 ? '' : $DedAmountDB[$DedAmountCount];
 									$DedGRP[$DedAmountCount] = $rowPayment['grp_code'];
 									$DedRSN[$DedAmountCount] = $rowPayment['rsn_code'];
+									$DedSeq[$DedAmountCount] = $rowPayment['sequence_no'];
 									}
 									
 									$resPayment = sqlStatement("SELECT  follow_up,follow_up_note from ar_activity where  session_id ='$payment_id' and
@@ -1134,6 +1136,7 @@ return false;
 							  ?>
 							  <tr class="text">
 							   <td>
+							    <input type="text" name="AdjSeq<?php echo $CountIndex;?>-Sub<?php echo $k?>" id="AdjSeq<?php echo $CountIndex;?>-Sub<?php echo $k?>" value="<?php echo $AdjSeq[$k];?>">
 							    <input type="hidden" name="HiddenAdjAmount<?php echo $CountIndex;?>-Sub<?php echo $k?>" id="HiddenAdjAmount<?php echo $CountIndex;?>-Sub<?php echo $k?>" value="<?php echo $AdjAmountDB[$k];?>">
 							    <input  name="AdjAmount<?php echo $CountIndex; ?>-Sub<?php echo $k;?>"  onKeyDown="PreventIt(event)"   autocomplete="off"  id="AdjAmount<?php echo $CountIndex; ?>-Sub<?php echo $k;?>"  value="<?php echo htmlspecialchars($AdjAmountDB[$k]); ?>"   onChange="ValidateNumeric(this);ScreenAdjustment(this,<?php echo $CountIndex; ?>,<?php echo $k;?>);UpdateTotalValues(1,<?php echo $TotalRows; ?>,'AdjAmount','AdjAmounttotal');RestoreValues(<?php echo $CountIndex; ?>)"  type="text"   style="width:40px;text-align:right; font-size:12px" />
 							   </td>
@@ -1171,6 +1174,7 @@ return false;
 							  ?>
 							  <tr class="text">
 							   <td>
+							    <input type="hidden" name="DedSeq<?php echo $CountIndex;?>-Sub<?php echo $k?>" id="DedSeq<?php echo $CountIndex;?>-Sub<?php echo $k?>" value="<?php echo $DedSeq[$k];?>"
 							    <input type="hidden" name="HiddenDeductible<?php echo $CountIndex;?>-Sub<?php echo $k?>" id="HiddenDeductible<?php echo $CountIndex;?>-Sub<?php echo $k?>" value="<?php echo $DedAmountDB[$k];?>">
 							    <input  name="Deductible<?php echo $CountIndex; ?>-Sub<?php echo $k;?>"  id="Deductible<?php echo $CountIndex; ?>-Sub<?php echo $k;?>"  onKeyDown="PreventIt(event)"  onChange="ValidateNumeric(this);UpdateTotalValues(1,<?php echo $TotalRows; ?>,'Deductible','deductibletotal');"  value="<?php echo htmlspecialchars($DedAmountDB[$k]); ?>"   autocomplete="off"   type="text"   style="width:40px;text-align:right; font-size:12px" />
 							   </td>
