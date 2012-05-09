@@ -45,9 +45,9 @@
    UpdateDeletedEncounter($row['pid'],$row['encounter']);
    echo $query . "<br>\n";
    sqlStatement($query);
+   }
   }
  }
-
  // Deactivate rows, with logging, for the specified table using the
  // specified SET and WHERE clauses.
  //

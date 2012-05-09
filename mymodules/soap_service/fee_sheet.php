@@ -617,7 +617,7 @@ class FeeSheet Extends Billing{
           $res_out = array();
           $qry = "SELECT cm.*,ic.name,CONCAT(u.fname,' ',u.mname,' ',u.lname) AS provider,f.name AS facility FROM capitation_master AS cm
             LEFT OUTER JOIN insurance_companies AS ic ON cm.cm_insid=ic.id LEFT OUTER JOIN users AS u ON cm.cm_provider=u.id
-            LEFT OUTER JOIN facility AS f ON cm.cm_billing_facId=f.id WHERE cm_activity=1 $where";
+            LEFT OUTER JOIN facility AS f ON cm.cm_billing_facId=f.id WHERE cm_activity=1 $where order by ic.name,provider";
           $res = sqlStatement($qry);
           while($row=sqlFetchArray($res)){
             $res_out[] = $row;
