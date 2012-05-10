@@ -223,9 +223,7 @@ for($i=1;$i<=trim(formData("subcount$CountRow"   ));$i++){
 			      "' and encounter  ='" . trim(formData("HiddenEncounter$CountRow"   ))  .
 			      "' and code  ='" . trim(formData("HiddenCode$CountRow"   ))  .
 			      "' and modifier  ='" . trim(formData("HiddenModifier$CountRow"   ))  .
-			      "' and adj_amount = '"    . trim(formData("HiddenAdjAmount$CountRow-Sub$i"   )) .
-			      "' and grp_code = '"    . trim(formData("HiddenAdjGRP$CountRow-Sub$i"   )) .
-			      "' and rsn_code = '"    . trim(formData("HiddenAdjRSN$CountRow-Sub$i"   )) .
+			      "' and sequence_no = '"    . trim(formData("AdjSeq$CountRow-Sub$i"   )) .
 			      "' and adj_amount!=0");
    if(sqlNumRows($resPayment)>0)
    {
@@ -242,9 +240,7 @@ for($i=1;$i<=trim(formData("subcount$CountRow"   ));$i++){
 		 "'  and  encounter  ='" . trim(formData("HiddenEncounter$CountRow"   ))  .
 		 "'  and  code  ='" . trim(formData("HiddenCode$CountRow"   ))  .
 		 "'  and  modifier  ='" . trim(formData("HiddenModifier$CountRow"   ))  .
-		 "'  and adj_amount = '"    . trim(formData("HiddenAdjAmount$CountRow-Sub$i"   )) .
-		 "'  and grp_code = '"    . trim(formData("HiddenAdjGRP$CountRow-Sub$i"   )) .
-		 "'  and rsn_code = '"    . trim(formData("HiddenAdjRSN$CountRow-Sub$i"   )) .
+		 "'  and sequence_no = '"    . trim(formData("AdjSeq$CountRow-Sub$i"   )) .
 		 "'  and adj_amount!=0");
    }
    else{
@@ -274,9 +270,7 @@ for($i=1;$i<=trim(formData("subcount$CountRow"   ));$i++){
 		"' and  encounter  ='" . trim(formData("HiddenEncounter$CountRow"   ))  .
 		"' and  code  ='" . trim(formData("HiddenCode$CountRow"   ))  .
 		"' and  modifier  ='" . trim(formData("HiddenModifier$CountRow"   ))  .
-		"' and adj_amount = '"    . trim(formData("HiddenAdjAmount$CountRow-Sub$i"   )) .
-		"' and grp_code = '"    . trim(formData("HiddenAdjGRP$CountRow-Sub$i"   )) .
-		"' and rsn_code = '"    . trim(formData("HiddenAdjRSN$CountRow-Sub$i"   )) .
+		"' and sequence_no = '"    . trim(formData("AdjSeq$CountRow-Sub$i"   )) .
 		"' and adj_amount!=0");
   }
 //==============================================================================================================================
@@ -287,9 +281,7 @@ for($i=1;$i<=trim(formData("subcount$CountRow"   ));$i++){
 			      "' and encounter  ='" . trim(formData("HiddenEncounter$CountRow"   ))  .
 			      "' and code  ='" . trim(formData("HiddenCode$CountRow"   ))  .
 			      "' and modifier  ='" . trim(formData("HiddenModifier$CountRow"   ))  .
-			      "' and ded_amount = '"    . trim(formData("HiddenDeductible$CountRow-Sub$i"   )) .
-			      "' and grp_code = '" . trim(formData("HiddenDedGRP$CountRow-Sub$i"   )) .
-			      "' and rsn_code = '" . trim(formData("HiddenDedRSN$CountRow-Sub$i"   )) .
+			      "' and sequence_no = '"    . trim(formData("DedSeq$CountRow-Sub$i"   )) .
 			      "' and memo like 'Deductable%'");
    if(sqlNumRows($resPayment)>0)
    {
@@ -306,9 +298,7 @@ for($i=1;$i<=trim(formData("subcount$CountRow"   ));$i++){
 		 "' and encounter  ='" . trim(formData("HiddenEncounter$CountRow"   ))  .
 		 "' and code  ='" . trim(formData("HiddenCode$CountRow"   ))  .
 		 "' and modifier  ='" . trim(formData("HiddenModifier$CountRow"   ))  .
-		 "' and ded_amount = '"    . trim(formData("HiddenDeductible$CountRow-Sub$i"   )) .
-		 "' and grp_code = '" . trim(formData("HiddenDedGRP$CountRow-Sub$i"   )) .
-		 "' and rsn_code = '" . trim(formData("HiddenDedRSN$CountRow-Sub$i"   )) .
+		 "' and sequence_no = '"    . trim(formData("DedSeq$CountRow-Sub$i"   )) .
 		 "' and memo like 'Deductable%'");
    }
    else{
@@ -338,9 +328,7 @@ for($i=1;$i<=trim(formData("subcount$CountRow"   ));$i++){
 		"' and  encounter  ='" . trim(formData("HiddenEncounter$CountRow"   ))  .
 		"' and  code  ='" . trim(formData("HiddenCode$CountRow"   ))  .
 		"' and  modifier  ='" . trim(formData("HiddenModifier$CountRow"   ))  .
-		"' and ded_amount = '"    . trim(formData("HiddenDeductible$CountRow-Sub$i"   )) .
-		"' and grp_code = '" . trim(formData("HiddenDedGRP$CountRow-Sub$i"   )) .
-		"' and rsn_code = '" . trim(formData("HiddenDedRSN$CountRow-Sub$i"   )) .
+		"' and sequence_no = '"    . trim(formData("DedSeq$CountRow-Sub$i"   )) .
 		"' and memo like 'Deductable%'");
   }
 }
@@ -1136,7 +1124,7 @@ return false;
 							  ?>
 							  <tr class="text">
 							   <td>
-							    <input type="text" name="AdjSeq<?php echo $CountIndex;?>-Sub<?php echo $k?>" id="AdjSeq<?php echo $CountIndex;?>-Sub<?php echo $k?>" value="<?php echo $AdjSeq[$k];?>">
+							    <input type="hidden" name="AdjSeq<?php echo $CountIndex;?>-Sub<?php echo $k?>" id="AdjSeq<?php echo $CountIndex;?>-Sub<?php echo $k?>" value="<?php echo $AdjSeq[$k];?>">
 							    <input type="hidden" name="HiddenAdjAmount<?php echo $CountIndex;?>-Sub<?php echo $k?>" id="HiddenAdjAmount<?php echo $CountIndex;?>-Sub<?php echo $k?>" value="<?php echo $AdjAmountDB[$k];?>">
 							    <input  name="AdjAmount<?php echo $CountIndex; ?>-Sub<?php echo $k;?>"  onKeyDown="PreventIt(event)"   autocomplete="off"  id="AdjAmount<?php echo $CountIndex; ?>-Sub<?php echo $k;?>"  value="<?php echo htmlspecialchars($AdjAmountDB[$k]); ?>"   onChange="ValidateNumeric(this);ScreenAdjustment(this,<?php echo $CountIndex; ?>,<?php echo $k;?>);UpdateTotalValues(1,<?php echo $TotalRows; ?>,'AdjAmount','AdjAmounttotal');RestoreValues(<?php echo $CountIndex; ?>)"  type="text"   style="width:40px;text-align:right; font-size:12px" />
 							   </td>
