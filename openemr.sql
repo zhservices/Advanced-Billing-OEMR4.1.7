@@ -143,4 +143,5 @@ insert into `list_options` (`list_id`, `option_id`, `title`, `seq`, `is_default`
 insert into `list_options` (`list_id`, `option_id`, `title`, `seq`, `is_default`, `option_value`, `mapping`, `notes`) values('Payment_Frequency','halfyearly','Half Yearly','0','0','0','','');
 insert into `list_options` (`list_id`, `option_id`, `title`, `seq`, `is_default`, `option_value`, `mapping`, `notes`) values('Payment_Frequency','yearly','Yearly','0','0','0','','');
 insert into `list_options` (`list_id`, `option_id`, `title`, `seq`, `is_default`, `option_value`, `mapping`, `notes`) values('lists','Payment_Frequency','Payment Frequency','0','0','0','','');
-ALTER TABLE `era_details`     CHANGE `check_number` `check_number` VARCHAR(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ; 
+ALTER TABLE `era_details`     CHANGE `check_number` `check_number` VARCHAR(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL ;
+INSERT INTO list_options ( list_id, option_id, title, seq, is_default, option_value, mapping, notes ) VALUES ( 'payment_adjustment_code', 'cap_payment', 'Capitation Payment', '100', '', '', '', '' )
