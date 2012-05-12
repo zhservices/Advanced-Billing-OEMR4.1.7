@@ -919,6 +919,12 @@ return false;
 				$deductibletot=0;
 				$takebacktot=0;
 				$allowedtot=0;
+				if($_POST['mode']=='exportpdf' || $_POST['mode']=='exportexcel'){
+				 echo "<script type='text/javascript'>";
+				 echo "alert('There is no data.');";
+				 echo "</script>";
+				 die;
+				}
 				if($RowSearchSub = sqlFetchArray($ResultSearchSub))
 				 {
 					$Resultset=array();//for exporting to pdf,excell
@@ -1278,7 +1284,10 @@ return false;
 					$Alignment='J';
 					//print_r($Resultset);die;
 					if($_POST['mode']=='exportpdf'){
-					ob_end_clean();
+					$x=ob_get_level();
+					for(;$x>0;$x--){
+					  ob_get_clean();
+					}
 					reportPDF($Resultset,$Grouping,$CalcFields,$CalcType,'',$HeadWidth,$Align,$Font,$PaperSize,$Orientation,$Header,'',
 					$Alignment,$DatePrepared,$TimePrepared,$PageNo,$ExtraFooterLine,$PrintFooterFirstPage);
 					ob_start();
@@ -1286,7 +1295,10 @@ return false;
 					if($_POST['mode']=='exportexcel'){
 					//print_r($Header)."<br>";
 					//echo $Alignment."-".$DatePrepared."-".$TimePrepared;
-					ob_end_clean();
+					$x=ob_get_level();
+					for(;$x>0;$x--){
+					  ob_get_clean();
+					}
 					reportEXCEL($Resultset,$Grouping,$CalcFields,$CalcType,'',$HeadWidth,$Align,$Font,$PaperSize,$Orientation,$Header,'',
 					$Alignment,$DatePrepared,$TimePrepared,$PageNo,$ExtraFooterLine,$PrintFooterFirstPage);
 					ob_start();

@@ -248,8 +248,8 @@ class FeeSheet Extends Billing{
         " VALUES('$payerID','$authId','$reference','$check_date',now(),'$pay_total',".
         " '$global_amount','$insurance','$capitation','$capitation','$pID','$capitation',now())"
       );
-      sqlStatement("INSERT INTO ar_activity (pid,encounter,code,modifier,payer_type,post_time,post_user,session_id,adj_amount,account_code)".
-        " VALUES ('$pID','$encounterID','$cod','$mod','$payer_type',now(),'$authId','$session_id','$totalcharge','$account_code')"
+      sqlStatement("INSERT INTO ar_activity (pid,encounter,code,modifier,payer_type,post_time,post_user,session_id,adj_amount,account_code,memo)".
+        " VALUES ('$pID','$encounterID','$cod','$mod','$payer_type',now(),'$authId','$session_id','$totalcharge','$account_code','Feesheet COPAY')"
       );
     }
     else{
@@ -315,7 +315,7 @@ class FeeSheet Extends Billing{
       list($credentials,$pID,$encounterID,$code,$modifier,$payer_type,$post_date,$authId,$session_id,$pay_amount,$account_code) = $data;
       $post_date = $post_date ? $post_date : 'now()';
       return idSqlStatement("INSERT INTO ar_activity (pid,encounter,code,modifier,payer_type,post_time,post_user,session_id,pay_amount,account_code,memo)".
-        " VALUES ('$pID','$encounterID','$code','$modifier','$payer_type',$post_date,'$authId','$session_id','$pay_amount','$account_code','Feesheet COPAY')"
+        " VALUES ('$pID','$encounterID','$code','$modifier','$payer_type','$post_date','$authId','$session_id','$pay_amount','$account_code','Feesheet COPAY')"
       );
     }
     else{
