@@ -383,8 +383,16 @@ global $debug,$InsertionId,$paydate,$cred;
                     $error = true;
                 }
                 ****/
-
-                unset($codes[$codekey]);
+                $insurance_done = true;
+                $got_response = false;
+                foreach ($codes[$codekey]['dtl'] as $ddata) {
+                    if ($ddata['pmt']) $got_response = true;
+                }
+                if (!$got_response) $insurance_done = false;
+                
+                if($insurance_done){
+                    unset($codes[$codekey]);
+                }
             }
 
             // If the service item is not in our database...
@@ -566,13 +574,14 @@ global $debug,$InsertionId,$paydate,$cred;
         // Report any existing service items not mentioned in the ERA, and
         // determine if any of them are still missing an insurance response
         // (if so, then insurance is not yet done with the claim).
+$currentlevel = sqlQuery("select last_level_billed from form_encounter where pid=".$pid." and encounter=".$encounter);
         $insurance_done = true;
         foreach ($codes as $code => $prev) {
       // writeOldDetail($prev, $arrow['name'], $invnumber, $service_date, $code, $bgcolor);
       writeOldDetail($prev, $patient_name, $invnumber, $service_date, $code, $bgcolor);
             $got_response = false;
             foreach ($prev['dtl'] as $ddata) {
-                if ($ddata['pmt'] || $ddata['rsn']) $got_response = true;
+                if (($ddata['pmt'] || $ddata['rsn']) && $ddata['plv']==$currentlevel['last_level_billed']) $got_response = true;
             }
             if (!$got_response) $insurance_done = false;
         }

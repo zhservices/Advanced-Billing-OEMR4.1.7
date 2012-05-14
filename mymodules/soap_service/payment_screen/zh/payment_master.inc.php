@@ -196,7 +196,10 @@ if(($screen=='new_payment' && $payment_id*1==0) || ($screen=='edit_payment' && $
 	   </script></td>
 		<td></td>
 	    <td align="left" class='text'><?php echo htmlspecialchars( xl('Post To Date'), ENT_QUOTES).':' ?></td>
-	    <td align="left" class="text"><input type='text' size='9' name='post_to_date' id='post_to_date' class="class1 text "   value="<?php echo $screen=='new_payment'?htmlspecialchars(oeFormatShortDate(date('Y-m-d'))):htmlspecialchars(oeFormatShortDate($PostToDate));?>"  readonly="" /></td>
+	    <td align="left" class="text">
+	      <input type='text' size='9' name='post_to_date' id='post_to_date' class="class1 text "   value="<?php echo $screen=='new_payment'?htmlspecialchars(oeFormatShortDate(date('Y-m-d'))):htmlspecialchars(oeFormatShortDate($PostToDate));?>"  readonly="" />
+	      <input type="hidden" name="prevPTD" id="prevPTD" value="<?php echo $screen=='new_payment'?htmlspecialchars(oeFormatShortDate(date('Y-m-d'))):htmlspecialchars(oeFormatShortDate($PostToDate));?>">
+	    </td>
 	    <td><img src='../../interface/main/calendar/modules/PostCalendar/pntemplates/default/images/new.jpg' align='absbottom'
 		id='img_post_to_date' border='0' alt='[?]' style='cursor:pointer'
 		title='<?php echo htmlspecialchars( xl('Click here to choose a date'), ENT_QUOTES); ?>' />

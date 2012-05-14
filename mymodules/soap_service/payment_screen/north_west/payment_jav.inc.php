@@ -417,6 +417,10 @@ function CheckPayingEntityAndDistributionPostFor()
  }
 function FormValidations()
  {//Screen validations are done here.
+  var checkpd;
+  if(document.getElementById('post_to_date').value!=document.getElementById('prevPTD').value){
+     checkpd = 1;
+  }
   if(document.getElementById('check_date').value=='')
    {
     alert("<?php echo htmlspecialchars( xl('Please Fill the Date'), ENT_QUOTES) ?>");
@@ -441,7 +445,7 @@ function FormValidations()
 	document.getElementById('post_to_date').focus();
 	return false;
    }
-  else if(DateCheckGreater(document.getElementById('post_to_date').value,'<?php echo $GLOBALS['post_to_date_benchmark']=='' ? date('Y-m-d',time() - (10 * 24 * 60 * 60)) : htmlspecialchars(oeFormatShortDate($GLOBALS['post_to_date_benchmark']));?>',
+  else if(1==checkpd && DateCheckGreater(document.getElementById('post_to_date').value,'<?php echo $GLOBALS['post_to_date_benchmark']=='' ? date('Y-m-d',time() - (10 * 24 * 60 * 60)) : htmlspecialchars(oeFormatShortDate($GLOBALS['post_to_date_benchmark']));?>',
   '<?php echo DateFormatRead();?>'))
    {
     alert("<?php echo htmlspecialchars( xl('Post To Date Must be greater than the Financial Close Date.'), ENT_QUOTES) ?>");

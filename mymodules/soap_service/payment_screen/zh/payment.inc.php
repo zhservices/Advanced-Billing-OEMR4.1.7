@@ -242,12 +242,13 @@ function QueueToNextLevel()
 	   {
 		if(trim(formData('type_name'   ))!='patient')
 		 {
-		     $codes = ar_get_invoice_summary(trim(formData('hidden_patient_code' )), $EncounterRowArray[$RowIndex], true);
+			$currentlevel = sqlQuery("select last_level_billed from form_encounter where pid=".trim(formData('hidden_patient_code' ))." and encounter=".$EncounterRowArray[$RowIndex]);
+			 $codes = ar_get_invoice_summary(trim(formData('hidden_patient_code' )), $EncounterRowArray[$RowIndex], true);
 		     $insurance_done = true;
 		     foreach ($codes as $code => $prev) {
 			    $got_response = false;
 			    foreach ($prev['dtl'] as $ddata) {
-				   if ($ddata['pmt']) $got_response = true;
+			       if (($ddata['pmt'] || $ddata['rsn']) && $ddata['plv']==$currentlevel['last_level_billed']) $got_response = true;
 			    }
 			    if (!$got_response) $insurance_done = false;
 		     }
@@ -325,11 +326,11 @@ $payment_denial_reasons = array(
 	'NON CVRD'  =>  'Non-covered',
 	'PAYER REFND'  =>  'Payer Refund',
 	'PD MAX'  =>  'Paid Maximum',
-	'PR ELIG'  =>  'Provider Eligible',
+	'PR ELIG'  =>  'Provider not Eligible',
 	'PRI EOB'  =>  'Primary EOB',
 	'PRO ADJ'  =>  'Provider Adjustments',
 	'PROV#'  =>  'Provider number',
-	'PT ELIG'  =>  'Patient Eligible',
+	'PT ELIG'  =>  'Patient not Eligible',
 	'PTRESP'  =>  'Patient Responsibility',
 	'REFF'  =>  'No PCP Referral',
 	'REVIEW/ IN PROCESS'  =>  'Insurance acknowledgment letter',
@@ -337,10 +338,14 @@ $payment_denial_reasons = array(
 	
 	'PRIMARY NOT PAID'  =>  'Amount not allowed according to the primary insurance contract',
 	'NO REASON'  =>  'Denial reason not given',
-	'HMO PT'  =>  'Pt enrolled in medicare hmo',
+	'HMO PT'  =>  'Pt enrolled in hmo',
 	'HOSPICE'  =>  'Pt enrolled in hospice',
 	'INVPROV INFO'  =>  'Invalid npi/tax id',
 	'NON PAR PROV'  =>  'Out of network provider',
 	'FREQUENCY'  =>  "Denied as frequency/the maximum number of doctor's visits have been exhausted",
+	'TERMINATED'	=>	'Coverage terminated',
+	'HCFA RET'	=>	'HCFA returned',
+	'LETTER'	=>	'Letter received from insurance /pt',
+	'PRI PD MORE'	=>	'Primary paid more than the secondary allowed amount',
 );
 ?>

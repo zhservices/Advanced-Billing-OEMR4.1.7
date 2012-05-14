@@ -551,6 +551,10 @@ function CheckPayingEntityAndDistributionPostFor()
  }
 function FormValidations()
  {//Screen validations are done here.
+	var checkpd;
+  if(document.getElementById('post_to_date').value!=document.getElementById('prevPTD').value){
+     checkpd = 1;
+  }
 	document.getElementById('hidden_type_code').value=document.getElementById('div_insurance_or_patient').innerHTML;
   if(document.getElementById('check_date').value=='')
    {
@@ -588,7 +592,7 @@ function FormValidations()
 	document.getElementById('post_to_date').focus();
 	return false;
    }
-  else if(DateCheckGreater(document.getElementById('post_to_date').value,'<?php
+  else if(1==checkpd && DateCheckGreater(document.getElementById('post_to_date').value,'<?php
      $arr=array();
      $arr[]=array('funcname'=>'get_oeFormatShortDate','batchkey'=>0,'param'=>array($GLOBALS['post_to_date_benchmark']));
      $xml=server_call('multiplecall',array($arr));
