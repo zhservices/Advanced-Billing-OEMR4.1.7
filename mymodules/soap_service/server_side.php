@@ -1087,7 +1087,20 @@ public function report_deleted($data)
    }
    else
    {throw new SoapFault("Server", "credentials failed in get_session_val");}
- }  
+ }
+ 
+public function server_print_elig($data){
+		if($this->valid($data[0])){
+				require_once dirname(__FILE__)."/../../library/edi.inc";
+				ob_start();
+				print_elig($data[1],$data[2],$data[3],$data[4],$data[5]);
+				$x12 = ob_get_clean();
+				return $x12;
+		}
+		else{
+				throw new SoapFault("Server", "credentials failed in server_print_elig");
+		}
+}
   
   public function valid($credentials){
 		return true;

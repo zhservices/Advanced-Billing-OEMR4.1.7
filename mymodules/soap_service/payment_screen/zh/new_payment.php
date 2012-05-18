@@ -95,6 +95,7 @@ if (isset($_POST["mode"]))
         "', adjustment_code = '"   . trim(formData('adjustment_code'   )) .
         "', post_to_date = '" . trim($post_to_date            )  .
         "', payment_method = '"   . trim(formData('payment_method'   )) .
+	"', payment_screen = '"   . 0 .
         "'");
 	 }
 	 else{
@@ -115,6 +116,7 @@ if (isset($_POST["mode"]))
 	"', cap_from_date = '" . trim($cap_from_date            )  .
 	"', cap_to_date = '" . trim($cap_to_date            )  .
 	"', cap_bill_facId = '" . trim(formData('billing_facility'   ))  .
+	"', payment_screen = '"   . 0 .
         "'");
 	  sqlStatement("INSERT INTO ar_activity SET pid = 0, encounter = 0, payer_type = 1, post_time=now(), post_user='".$user_id."', ".
 		       " session_id = '".$cap_id."',pay_amount ='".trim(formData('payment_amount'))."' ,modified_time=now(),account_code='CAPPMNT'");

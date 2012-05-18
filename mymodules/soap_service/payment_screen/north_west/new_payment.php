@@ -91,6 +91,7 @@ if (isset($_POST["mode"]))
         "', adjustment_code = '"   . trim(formData('adjustment_code'   )) .
         "', post_to_date = '" . trim($post_to_date            )  .
         "', payment_method = '"   . trim(formData('payment_method'   )) .
+	"', payment_screen = '"   . 10 .
         "'");
    }
  }

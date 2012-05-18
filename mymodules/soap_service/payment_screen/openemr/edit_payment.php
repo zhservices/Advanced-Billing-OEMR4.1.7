@@ -137,6 +137,7 @@ if (isset($_POST["mode"]))
         "', adjustment_code = '"   . trim(formData('adjustment_code'   )) .
         "', post_to_date = '" . trim($post_to_date            )  .
         "', payment_method = '"   . trim(formData('payment_method'   )) .
+	"', payment_screen = '"   . 1 .
         "'	where session_id='$payment_id'");
 //===============================================================================
 	$CountIndexAbove=$_REQUEST['CountIndexAbove'];
@@ -734,6 +735,7 @@ return false;
   }
   ?>
 ' style="display:inline" >
+ <input type="hidden" name="screen" value="<?php echo $_REQUEST['screen'];?>">
 <table width="958" border="0"  cellspacing="0" cellpadding="0">
 <?php
   if($_REQUEST['ParentPage']=='new_payment')
