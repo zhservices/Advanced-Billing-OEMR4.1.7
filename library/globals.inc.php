@@ -1384,6 +1384,21 @@ $GLOBALS_METADATA = array(
       '',
       xl('External Module Site Address.')
     ),
+    
+    'availity_username' => array(
+      xl('Availity Username'),
+      'text',                           // data type
+      '',
+      xl('Availity Username(Put Blank If not subscribed to Availity).')
+    ),
+    
+    'availity_password' => array(
+      xl('Availity Password'),
+      'pass',                           // data type
+      '',
+      xl('Availity Password(Put Blank If not subscribed to Availity).')
+    ),
+    
   ),
 );
 ?>
