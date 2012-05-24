@@ -205,10 +205,14 @@ class FeeSheet Extends Billing{
   public function fee_sheet_update7($data){
     if($this->valid($data[0])){
       list($credentials,$authId,$reference,$check_date,$post_date,$copay_val,$payment_method,$adj_code,$billFac,$SID) = $data;
-      $post_date = $post_date ? $post_date : 'now()';
-      sqlStatement("UPDATE ar_session SET user_id='$authId', reference='$reference', check_date='$check_date', deposit_date='$post_date', ".
-        " pay_total='$copay_val', modified_time=now(), payment_method='$payment_method',adjustment_code='$adj_code', post_to_date='$post_date',cap_bill_facId='$billFac' WHERE session_id='$SID'");
-    }
+	  if($post_date){
+		sqlStatement("UPDATE ar_session SET user_id='$authId', reference='$reference', check_date='$check_date', deposit_date=now(), ".
+		  " pay_total='$copay_val', modified_time=now(), payment_method='$payment_method',adjustment_code='$adj_code', post_to_date='$post_date',cap_bill_facId='$billFac' WHERE session_id='$SID'");
+	  }else{
+	    sqlStatement("UPDATE ar_session SET user_id='$authId', reference='$reference', check_date='$check_date', deposit_date=now(), ".
+		  " pay_total='$copay_val', modified_time=now(), payment_method='$payment_method',adjustment_code='$adj_code',post_to_date=now(),cap_bill_facId='$billFac' WHERE session_id='$SID'");
+	  }
+	}
     else{
       throw new SoapFault("Server", "credentials failed in fee_sheet_update7");
     }
@@ -217,8 +221,11 @@ class FeeSheet Extends Billing{
   public function fee_sheet_update8($data){
     if($this->valid($data[0])){
       list($credentials,$cod,$mod,$authId,$copay_val,$account_code,$SID,$post_date) = $data;
-      $post_date = $post_date ? $post_date : 'now()';
-      sqlStatement("UPDATE ar_activity SET code='$cod', modifier='$mod', post_user='$authId', post_time='$post_date', pay_amount='$copay_val', modified_time=now(),memo='Feesheet COPAY' WHERE account_code='$account_code' AND session_id='$SID'");
+      if($post_date){
+	    sqlStatement("UPDATE ar_activity SET code='$cod', modifier='$mod', post_user='$authId', post_time='$post_date', pay_amount='$copay_val', modified_time=now(),memo='Feesheet COPAY' WHERE account_code='$account_code' AND session_id='$SID'");
+	  }else{
+	    sqlStatement("UPDATE ar_activity SET code='$cod', modifier='$mod', post_user='$authId', post_time=now(), pay_amount='$copay_val', modified_time=now(),memo='Feesheet COPAY' WHERE account_code='$account_code' AND session_id='$SID'");
+	  }
     }
     else{
       throw new SoapFault("Server", "credentials failed in fee_sheet_update8");
@@ -298,12 +305,19 @@ class FeeSheet Extends Billing{
   public function fee_sheet_insert4($data){
     if($this->valid($data[0])){
       list($credentials,$payerID,$authId,$reference,$check_date,$post_date,$pay_total,$global_amount,$insurance,$capitation,$pID,$payment_method,$adj_code,$billFac) = $data;
-      $post_date = $post_date ? $post_date : 'now()';
-      return idSqlStatement("INSERT INTO ar_session (payer_id,user_id,reference,check_date,deposit_date,pay_total,".
-        " global_amount,payment_type,description,patient_id,payment_method,adjustment_code,post_to_date,cap_bill_facId) ".
-        " VALUES('$payerID','$authId','$reference','$check_date','$post_date','$pay_total',".
-        " '$global_amount','$insurance','$capitation','$pID','$payment_method','$adj_code','$post_date','$billFac')"
-      );
+      if($post_date){
+		return idSqlStatement("INSERT INTO ar_session (payer_id,user_id,reference,check_date,deposit_date,pay_total,".
+		  " global_amount,payment_type,description,patient_id,payment_method,adjustment_code,post_to_date,cap_bill_facId) ".
+		  " VALUES('$payerID','$authId','$reference','$check_date',now(),'$pay_total',".
+		  " '$global_amount','$insurance','$capitation','$pID','$payment_method','$adj_code','$post_date','$billFac')"
+		);
+	  }else{
+	    return idSqlStatement("INSERT INTO ar_session (payer_id,user_id,reference,check_date,deposit_date,pay_total,".
+		  " global_amount,payment_type,description,patient_id,payment_method,adjustment_code,post_to_date,cap_bill_facId) ".
+		  " VALUES('$payerID','$authId','$reference','$check_date',now(),'$pay_total',".
+		  " '$global_amount','$insurance','$capitation','$pID','$payment_method','$adj_code',now(),'$billFac')"
+		);
+	  }
     }
     else{
       throw new SoapFault("Server", "credentials failed in fee_sheet_insert4");
@@ -313,10 +327,15 @@ class FeeSheet Extends Billing{
   public function fee_sheet_insert5($data){
     if($this->valid($data[0])){
       list($credentials,$pID,$encounterID,$code,$modifier,$payer_type,$post_date,$authId,$session_id,$pay_amount,$account_code) = $data;
-      $post_date = $post_date ? $post_date : 'now()';
-      return idSqlStatement("INSERT INTO ar_activity (pid,encounter,code,modifier,payer_type,post_time,post_user,session_id,pay_amount,account_code,memo)".
-        " VALUES ('$pID','$encounterID','$code','$modifier','$payer_type','$post_date','$authId','$session_id','$pay_amount','$account_code','Feesheet COPAY')"
-      );
+      if($post_date){
+	    return idSqlStatement("INSERT INTO ar_activity (pid,encounter,code,modifier,payer_type,post_time,post_user,session_id,pay_amount,account_code,memo)".
+          " VALUES ('$pID','$encounterID','$code','$modifier','$payer_type','$post_date','$authId','$session_id','$pay_amount','$account_code','Feesheet COPAY')"
+        );
+	  }else{
+	    return idSqlStatement("INSERT INTO ar_activity (pid,encounter,code,modifier,payer_type,post_time,post_user,session_id,pay_amount,account_code,memo)".
+          " VALUES ('$pID','$encounterID','$code','$modifier','$payer_type',now(),'$authId','$session_id','$pay_amount','$account_code','Feesheet COPAY')"
+        );
+	  }
     }
     else{
       throw new SoapFault("Server", "credentials failed in fee_sheet_insert5");
