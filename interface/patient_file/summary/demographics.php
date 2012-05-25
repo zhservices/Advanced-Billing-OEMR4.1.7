@@ -351,6 +351,15 @@ $(document).ready(function(){
     'frameWidth' : 1000,
     'centerOnScroll' : false
   });
+	
+	// modal for dialog boxes
+  $(".midsized_modal").fancybox( {
+    'overlayOpacity' : 0.0,
+    'showCloseButton' : true,
+    'frameHeight' : 600,
+    'frameWidth' : 800,
+    'centerOnScroll' : false
+  });
 
 // modal for image viewer
   $(".image_modal").fancybox( {
@@ -443,6 +452,10 @@ $(document).ready(function(){
 	echo '<td style="padding-left:1em;"><a class="css_button iframe1" href="../../soap_functions/soap_accountStatusDetails.php" onclick="top.restoreSession()">';
 	echo "<span>".htmlspecialchars(xl('NewCrop Account Status'),ENT_NOQUOTES)."</span></a></td><td id='accountstatus'></td>";
    }
+	if($GLOBALS['external_module_path'] && $GLOBALS['external_module_username'] && $GLOBALS['external_module_password'] && $GLOBALS['availity_username'] && $GLOBALS['availity_password']){
+		echo '<td style="padding-left:1em;"><a class="css_button iframe midsized_modal" href="../../../mymodules/index.php?id=2&billing_module=1&insurance_eligibility=1&pid='.$pid.'" onclick="top.restoreSession()">';
+		echo "<span>".htmlspecialchars(xl('Check Insurance Eligibility'),ENT_NOQUOTES)."</span></a></td><td id='ins_eligibility'></td>";
+	}
   //Patient Portal
   $portalUserSetting = true; //flag to see if patient has authorized access to portal
   if($GLOBALS['portal_onsite_enable'] && $GLOBALS['portal_onsite_address']){
