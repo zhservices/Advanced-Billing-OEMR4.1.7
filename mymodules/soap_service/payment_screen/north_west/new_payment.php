@@ -174,7 +174,7 @@ function PostPayments()
 	  return false;
 	 }
 	<?php
-	if($GLOBALS['msp_capturing_payment_screen']){
+	if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 	?>
 	if(document.getElementById('ins_adjud_date').value=='' || document.getElementById('ins_adjud_date').value=='0000-00-00'){
 	 alert("<?php echo addslashes(xl('Please Fill Insurance Adjudicated Date.'));?>");
@@ -205,7 +205,7 @@ function FinishPayments()
 	  return false;
 	 }
 	<?php
-	if($GLOBALS['msp_capturing_payment_screen']){
+	if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 	?>
 	if(document.getElementById('ins_adjud_date').value=='' || document.getElementById('ins_adjud_date').value=='0000-00-00'){
 	 alert("<?php echo addslashes(xl('Please Fill Insurance Adjudicated Date.'));?>");

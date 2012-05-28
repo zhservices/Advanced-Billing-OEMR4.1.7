@@ -835,7 +835,7 @@ return false;
 							<td width="60" class="left top" ><?php echo htmlspecialchars( xl('Payment'), ENT_QUOTES) ?></td>
 							<td width="112" class="left top" >
 							<?php
-							if($GLOBALS['msp_capturing_payment_screen']){
+							if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 							?>
 							 <table border="0" cellpadding="0" cellspacing="0" align="center">
 							  <tr class="text"><td colspan="3" class="bottom" align="center" width="112"><?php echo htmlspecialchars( xl('Adjustment'), ENT_QUOTES) ?></td></tr>
@@ -854,7 +854,7 @@ return false;
 							</td>
 							<td width="112" class="left top" >
 							<?php
-							if($GLOBALS['msp_capturing_payment_screen']){
+							if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 							?>
 							 <table border="0" cellpadding="0" cellspacing="0" align="center">
 							  <tr class="text"><td colspan="3" class="bottom" align="center" width="112"><?php echo htmlspecialchars( xl('Deductible'), ENT_QUOTES) ?></td></tr>
@@ -876,7 +876,7 @@ return false;
 							<td width="40" class="left top" ><?php echo htmlspecialchars( xl('Resn'), ENT_QUOTES) ?></td>
 							<td width="150" class="left top" ><?php echo htmlspecialchars( xl('Follow Up Reason'), ENT_QUOTES) ?></td>
 							<?php
-							if($GLOBALS['msp_capturing_payment_screen']){
+							if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 							?>
 							<td width="20" class="left top right" >&nbsp;</td>
 							<?php
@@ -1117,7 +1117,7 @@ return false;
 							<td class="<?php echo $StringClass; ?>" ><input   type="text"  name="Payment<?php echo $CountIndex; ?>"  onKeyDown="PreventIt(event)"   autocomplete="off"  id="Payment<?php echo $CountIndex; ?>" value="<?php echo htmlspecialchars($PaymentDB); ?>"  onChange="ValidateNumeric(this);ScreenAdjustment(this,<?php echo $CountIndex; ?>);UpdateTotalValues(1,<?php echo $TotalRows; ?>,'Payment','paymenttotal');RestoreValues(<?php echo $CountIndex; ?>)"  style="width:60px;text-align:right; font-size:12px" /></td>
 							<td class="<?php echo $StringClass; ?>" >
 							 <?php
-							 if($GLOBALS['msp_capturing_payment_screen']){
+							 if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 							 ?>
 							 <table border="0" cellpadding="0" cellspacing="0" align="center" id="AdjustmentTable<?php echo $CountIndex;?>">
 							  <?php
@@ -1156,7 +1156,7 @@ return false;
 							</td>
 							<td class="<?php echo $StringClass; ?>" >
 							 <?php
-							 if($GLOBALS['msp_capturing_payment_screen']){
+							 if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 							 ?>
 							 <table border="0" cellpadding="0" cellspacing="0" align="center" id="DeductibleTable<?php echo $CountIndex;?>">
 							  <?php
@@ -1196,7 +1196,7 @@ return false;
 							<td align="center" class="<?php echo $StringClass; ?>" ><input type="checkbox" id="FollowUp<?php echo $CountIndex; ?>"  name="FollowUp<?php echo $CountIndex; ?>" value="y" onClick="ActionFollowUp(<?php echo $CountIndex; ?>)" <?php echo $FollowUpDB=='y' ? ' checked ' : ''; ?> /></td>
 							<td class="<?php echo $StringClass; ?> right" ><input  onKeyDown="PreventIt(event)" id="FollowUpReason<?php echo $CountIndex; ?>"    name="FollowUpReason<?php echo $CountIndex; ?>"  <?php echo $FollowUpDB=='y' ? '' : ' readonly '; ?>  type="text"  value="<?php echo htmlspecialchars($FollowUpReasonDB); ?>"    style="width:110px;font-size:12px" /></td>
 							<?php
-							if($GLOBALS['msp_capturing_payment_screen']){
+							if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 							?>
 							<td class="<?php echo $StringClass; ?> right" onclick="add_dynamic_row('<?php echo $CountIndex; ?>');" ><img src="../images/add_btn.png" border="0"</td>
 							<?php

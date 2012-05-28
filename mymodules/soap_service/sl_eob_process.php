@@ -575,6 +575,8 @@ global $debug,$InsertionId,$paydate,$cred;
         // determine if any of them are still missing an insurance response
         // (if so, then insurance is not yet done with the claim).
 $currentlevel = sqlQuery("select last_level_billed from form_encounter where pid=".$pid." and encounter=".$encounter);
+        $codes = array();
+        $codes = ar_get_invoice_summary($pid, $encounter, true);
         $insurance_done = true;
         foreach ($codes as $code => $prev) {
       // writeOldDetail($prev, $arrow['name'], $invnumber, $service_date, $code, $bgcolor);
@@ -761,6 +763,24 @@ $currentlevel = sqlQuery("select last_level_billed from form_encounter where pid
                 }
             if($StringPrint=='Yes')
                 echo "<script>alert('$StringIssue')</script>";
+            
+            //Update ar_session payment_screen field to 10 for secondary payments from medicare.
+            foreach($InsertionId as $key => $value){
+                $res_pid = sqlStatement("select distinct pid from ar_activity where payer_type=1 and session_id=?",array($value));//select patients for a session_id
+                $pidArray = array();
+                while($row_pid = sqlFetchArray($res_pid)){
+                    $pidArray[] = $row_pid['pid'];
+                }
+                foreach($pidArray as $key_1 => $value_1){
+                    $res_primary = sqlQuery("select msp_category from insurance_data where pid=? and type='primary' order by date desc limit 1",array($value_1));//check is msp is set for primary insurance
+                    $res_secondary = sqlQuery("select ic.freeb_type from insurance_data as id, insurance_companies as ic
+                        where id.pid=? and id.type='secondary' and id.provider=ic.id order by id.date desc limit 1",array($value_1));//check if secondary insurance is medicare type
+                    if($res_primary['msp_category'] != 0 && $res_secondary['freeb_type'] == 2){//freeb_type = 2 is claim type MB(medicare)
+                        sqlQuery("update ar_session set payment_screen=10 where session_id='$value'");//update payment_screen to 10(MSP Screen)
+                    }
+                }
+                unset($pidArray);
+            }
          }
 
           if (!$INTEGRATED_AR) slTerminate();

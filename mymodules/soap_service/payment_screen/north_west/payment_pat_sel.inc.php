@@ -146,7 +146,7 @@ if (isset($_POST["mode"]))
 				<td width="60" class="left top" ><?php echo htmlspecialchars( xl('Payment'), ENT_QUOTES) ?></td>
 				<td width="112" class="left top" >
 				<?php
-				if($GLOBALS['msp_capturing_payment_screen']){
+				if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 				?>
 				 <table border="0" cellpadding="0" cellspacing="0" align="center">
 				  <tr class="text"><td colspan="3" class="bottom" align="center" width="112"><?php echo htmlspecialchars( xl('Adjustment'), ENT_QUOTES) ?></td></tr>
@@ -165,7 +165,7 @@ if (isset($_POST["mode"]))
 				</td>
 				<td width="112" class="left top" >
 				<?php
-				if($GLOBALS['msp_capturing_payment_screen']){
+				if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 				?>
 				 <table border="0" cellpadding="0" cellspacing="0" align="center">
 				  <tr class="text"><td colspan="3" class="bottom" align="center" width="112"><?php echo htmlspecialchars( xl('Deductible'), ENT_QUOTES) ?></td></tr>
@@ -187,7 +187,7 @@ if (isset($_POST["mode"]))
 				<td width="60" class="left top" ><?php echo htmlspecialchars( xl('Follow Up'), ENT_QUOTES) ?></td>
 				<td width="150" class="left top" ><?php echo htmlspecialchars( xl('Follow Up Reason'), ENT_QUOTES) ?></td>
 				<?php
-				if($GLOBALS['msp_capturing_payment_screen']){
+				if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 				?>
 				<td width="20" class="left top right" >&nbsp;</td>
 				<?php
@@ -328,7 +328,7 @@ if (isset($_POST["mode"]))
 				   style="width:60px;text-align:right; font-size:12px" /></td>
 				<td class="<?php echo $StringClass; ?>" >
 				<?php
-				if($GLOBALS['msp_capturing_payment_screen']){
+				if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 				?>
 				 <table border="0" cellpadding="0" cellspacing="0" align="center" id="AdjustmentTable<?php echo $CountIndex;?>">
 				  <tr class="text">
@@ -362,7 +362,7 @@ if (isset($_POST["mode"]))
 				</td>
 				<td class="<?php echo $StringClass; ?>" >
 				<?php
-				if($GLOBALS['msp_capturing_payment_screen']){
+				if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 				?>
 				 <table border="0" cellpadding="0" cellspacing="0" align="center" id="DeductibleTable<?php echo $CountIndex;?>">
 				  <tr class="text">
@@ -401,7 +401,7 @@ if (isset($_POST["mode"]))
 				<td class="<?php echo $StringClass; ?>" ><input  onKeyDown="PreventIt(event)" id="FollowUpReason<?php echo $CountIndex; ?>"   
 				 name="FollowUpReason<?php echo $CountIndex; ?>"  readonly=""  type="text"   style="width:150px;font-size:12px" /></td>
 				<?php
-				if($GLOBALS['msp_capturing_payment_screen']){
+				if(1){//changed $GLOBALS['msp_capturing_payment_screen'] to 1. this screen will always show MSP
 				?>
 				<td class="<?php echo $StringClass; ?> right" onclick="add_dynamic_row('<?php echo $CountIndex; ?>','<?php echo $CountIndexAbove*1+1; ?>','<?php echo $TotalRows; ?>');" ><img src="../images/add_btn.png" border="0" alt="+"></td>
 				<?php
