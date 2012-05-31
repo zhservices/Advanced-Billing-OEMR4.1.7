@@ -29,6 +29,21 @@
 //===============================================================================
 ?>
 <script type="text/javascript">
+var i_prevPTD = 0;
+function populateFields(){
+  if(i_prevPTD==0)
+    post_to_date = document.getElementById('prevPTD').value;
+  
+  var deposit_date = document.getElementById('deposit_date').value;
+  var check_date = document.getElementById('check_date').value;
+  
+  if(deposit_date == "" || deposit_date == post_to_date)
+    document.getElementById('deposit_date').value = document.getElementById('post_to_date').value;
+  if(check_date == "" || check_date == post_to_date)
+    document.getElementById('check_date').value = document.getElementById('post_to_date').value;
+  post_to_date = document.getElementById('post_to_date').value;
+  i_prevPTD++;
+}
 var sel_list = new Array();
 var count = 0;
 function waitandappend(ele,val){

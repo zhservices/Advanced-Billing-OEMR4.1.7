@@ -184,7 +184,7 @@ if(($screen=='new_payment' && $payment_id*1==0) || ($screen=='edit_payment' && $
 	  <tr>
 	    <td align="left" class='text'></td>
 		<td align="left" class='text'><?php echo htmlspecialchars( xl('Date'), ENT_QUOTES).':' ?></td>
-		<td align="left" class="text" ><input type='text' size='9' name='check_date' id='check_date' class="class1 text "  value="<?php echo htmlspecialchars(oeFormatShortDate($CheckDate));?>"/></td>
+		<td align="left" class="text" ><input type='text' size='9' name='check_date' id='check_date' class="class1 text "  value="<?php echo $screen=='new_payment'?htmlspecialchars(oeFormatShortDate(date('Y-m-d'))):htmlspecialchars(oeFormatShortDate($CheckDate));?>"/></td>
 		<td><img src='../../interface/main/calendar/modules/PostCalendar/pntemplates/default/images/new.jpg' align='absbottom'
 		id='img_checkdate' border='0' alt='[?]' style='cursor:pointer'
 		title='<?php echo htmlspecialchars( xl('Click here to choose a date'), ENT_QUOTES); ?>' />
@@ -194,7 +194,7 @@ if(($screen=='new_payment' && $payment_id*1==0) || ($screen=='edit_payment' && $
 		<td></td>
 	    <td align="left" class='text'><?php echo htmlspecialchars( xl('Post To Date'), ENT_QUOTES).':' ?></td>
 	    <td align="left" class="text">
-	      <input type='text' size='9' name='post_to_date' id='post_to_date' class="class1 text "   value="<?php echo $screen=='new_payment'?htmlspecialchars(oeFormatShortDate(date('Y-m-d'))):htmlspecialchars(oeFormatShortDate($PostToDate));?>"  readonly="" />
+	      <input type='text' size='9' name='post_to_date' id='post_to_date' class="class1 text "   value="<?php echo $screen=='new_payment'?htmlspecialchars(oeFormatShortDate(date('Y-m-d'))):htmlspecialchars(oeFormatShortDate($PostToDate));?>"  readonly="" onchange="populateFields()"/>
 	      <input type="hidden" name="prevPTD" id="prevPTD" value="<?php echo $screen=='new_payment'?htmlspecialchars(oeFormatShortDate(date('Y-m-d'))):htmlspecialchars(oeFormatShortDate($PostToDate));?>">
 	    </td>
 	    <td><img src='../../interface/main/calendar/modules/PostCalendar/pntemplates/default/images/new.jpg' align='absbottom'
@@ -289,7 +289,7 @@ if(($screen=='new_payment' && $payment_id*1==0) || ($screen=='edit_payment' && $
 	  <tr>
 	    <td align="left" class='text'></td>
 		<td align="left" class='text'><?php echo htmlspecialchars( xl('Deposit Date'), ENT_QUOTES).':' ?></td>
-		<td align="left"><input type='text' size='9' name='deposit_date' id='deposit_date'  onKeyDown="PreventIt(event)"   class="class1 text " value="<?php echo htmlspecialchars(oeFormatShortDate($DepositDate));?>"    />	   </td>
+		<td align="left"><input type='text' size='9' name='deposit_date' id='deposit_date'  onKeyDown="PreventIt(event)"   class="class1 text " value="<?php echo $screen=='new_payment'?htmlspecialchars(oeFormatShortDate(date('Y-m-d'))):htmlspecialchars(oeFormatShortDate($DepositDate));?>"    />	   </td>
 		<td><img src='../../interface/main/calendar/modules/PostCalendar/pntemplates/default/images/new.jpg' align='absbottom'
 		id='img_depositdate' border='0' alt='[?]' style='cursor:pointer'
 		title='<?php echo htmlspecialchars( xl('Click here to choose a date'), ENT_QUOTES); ?>' />

@@ -289,7 +289,7 @@ for($i=1;$i<=trim(formData("subcount$CountRow"   ));$i++){
     sqlStatement("update ar_activity set "    .
 		 "   post_user = '" . trim($user_id            )  .
 		 "', modified_time = '"  . trim($created_time					) .
-		 "', memo = '"    . "Deductable $".trim(formData("Deductible$CountRow"   )) .
+		 "', memo = '"    . "Deductable $".trim(formData("Deductible$CountRow-Sub$i"   )) .
 		 "', account_code = '" . "Deduct"  .
 		 "', payer_type = '"   . trim(formData("HiddenIns$CountRow"   )) .
 		 "', ded_amount = '"    . trim(formData("Deductible$CountRow-Sub$i"   )) .
@@ -1021,8 +1021,12 @@ return false;
 									$TakebackDB=$rowPayment['pay_amount']*-1;
 									$TakebackDB=$TakebackDB == 0 ? '' : $TakebackDB;
 									$resPayment = sqlStatement("SELECT  adj_amount,grp_code,rsn_code,sequence_no from ar_activity where  session_id ='$payment_id' and
-									pid ='$PId' and  encounter  ='$Encounter' and  code='$Code' and modifier='$Modifier'  and adj_amount!=0");
+									pid ='$PId' and  encounter  ='$Encounter' and  code='$Code' and modifier='$Modifier'  and adj_amount!=0 ORDER BY sequence_no");
 									$AdjAmountCount=0;
+									unset($AdjAmountDB);
+									unset($AdjGRP);
+									unset($AdjRSN);
+									unset($AdjSeq);
 									while($rowPayment = sqlFetchArray($resPayment)){
 									$AdjAmountCount++;
 									$AdjAmountDB[$AdjAmountCount]=$rowPayment['adj_amount']*1;
@@ -1032,8 +1036,13 @@ return false;
 									$AdjSeq[$AdjAmountCount] = $rowPayment['sequence_no'];
 									}
 									$resPayment = sqlStatement("SELECT  ded_amount,grp_code,rsn_code,memo,sequence_no from ar_activity where  session_id ='$payment_id' and
-									pid ='$PId' and  encounter  ='$Encounter' and  code='$Code' and modifier='$Modifier'  and (ded_amount!=0 OR memo LIKE 'Deductable%')");
+									pid ='$PId' and  encounter  ='$Encounter' and  code='$Code' and modifier='$Modifier'  and (ded_amount!=0 OR memo LIKE 'Deductable%')  ORDER BY sequence_no");
 									$DedAmountCount=0;
+									unset($DedAmountDB);
+									unset($DeductibleDB);
+									unset($DedGRP);
+									unset($DedRSN);
+									unset($DedSeq);
 									while($rowPayment = sqlFetchArray($resPayment)){
 									$DedAmountCount++;
 									$DedAmountDB[$DedAmountCount]=$rowPayment['ded_amount']*1;

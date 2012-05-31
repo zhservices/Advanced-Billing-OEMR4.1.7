@@ -383,16 +383,8 @@ global $debug,$InsertionId,$paydate,$cred;
                     $error = true;
                 }
                 ****/
-                $insurance_done = true;
-                $got_response = false;
-                foreach ($codes[$codekey]['dtl'] as $ddata) {
-                    if ($ddata['pmt']) $got_response = true;
-                }
-                if (!$got_response) $insurance_done = false;
                 
-                if($insurance_done){
-                    unset($codes[$codekey]);
-                }
+				unset($codes[$codekey]);
             }
 
             // If the service item is not in our database...
@@ -510,8 +502,48 @@ global $debug,$InsertionId,$paydate,$cred;
                     // Post a zero-dollar adjustment just to save it as a comment.
                     if (!$error && !$debug) {
             if ($INTEGRATED_AR) {
-              arPostAdjustment($pid, $encounter, $InsertionId[$out['check_number']], 0, $codekey,//$InsertionId[$out['check_number']] gives the session id
-                substr($inslabel,3), $reason, $debug);
+              //arPostAdjustment($pid, $encounter, $InsertionId[$out['check_number']], 0, $codekey,//$InsertionId[$out['check_number']] gives the session id
+             //   substr($inslabel,3), $reason, $debug);
+                
+                
+                //-------------------------->Added by Eldho May 29,2012.
+                //Code 227 represents Information requested not received from patient. According to Rajitha 
+                //Patients has to be contacted first then according to that move to patient or get it re processed.
+                
+                 $rsncode=strtoupper($adj['reason_code']);
+                $code_value .= $svc['code'].'_'.$svc['mod'].'_'.$adj['group_code'].'_'.$adj['reason_code'].',';
+            if($rsncode<>'227'){//these should not be adjusted. Have to contact patient then decide
+              arPostAdjustment($pid, $encounter, $InsertionId[$out['check_number']],0,//$InsertionId[$out['check_number']] gives the session id
+                $codekey, substr($inslabel,3),
+                "Adjust code " . $adj['reason_code'], $debug);
+                }
+           else{  //these codes are not actual adjustments But denial so we are dealing in that way Eldho Feb 23,2011
+            $code_value = substr($code_value,0,-1);
+                    //We store the reason code to display it with description in the billing manager screen.
+                    //process_file is used as for the denial case file name will not be there, and extra field(to store reason) can be avoided.
+               updateClaim(true, $pid, $encounter, $_REQUEST['InsId'], substr($inslabel,3),7,0,$code_value);
+				$query = "INSERT INTO ar_activity ( " .
+					  "pid, encounter, code, modifier, payer_type, post_time, post_user, " .
+					  "session_id,follow_up,follow_up_note" .
+					  ") VALUES ( " .
+					  "'$pid', " .
+					  "'$encounter', " .
+					  "'{$svc['code']}', " .
+					  "'{$svc['mod']}', " .
+					  "'".substr($inslabel,3)."', " .
+					  "NOW(), " .
+					  "'" . $_SESSION['authUserID'] . "', " .
+					  "'".$InsertionId[$out['check_number']]."', " .
+					  "'d', " .
+					  "'{$adj['reason_code']}' " .
+					  ")";
+					sqlStatement($query);
+              }
+                
+                
+                
+                //------------------------------>
+                
             } else {
               slPostAdjustment($arrow['id'], 0, $production_date,
                 $out['check_number'], $codekey, $insurance_id,
@@ -574,16 +606,17 @@ global $debug,$InsertionId,$paydate,$cred;
         // Report any existing service items not mentioned in the ERA, and
         // determine if any of them are still missing an insurance response
         // (if so, then insurance is not yet done with the claim).
-$currentlevel = sqlQuery("select last_level_billed from form_encounter where pid=".$pid." and encounter=".$encounter);
+        $currentlevel = sqlQuery("select last_level_billed from form_encounter where pid=".$pid." and encounter=".$encounter);
+        unset($codes);
         $codes = array();
         $codes = ar_get_invoice_summary($pid, $encounter, true);
-        $insurance_done = true;
+        $insurance_done = true;        
         foreach ($codes as $code => $prev) {
-      // writeOldDetail($prev, $arrow['name'], $invnumber, $service_date, $code, $bgcolor);
-      writeOldDetail($prev, $patient_name, $invnumber, $service_date, $code, $bgcolor);
+            // writeOldDetail($prev, $arrow['name'], $invnumber, $service_date, $code, $bgcolor);
+            writeOldDetail($prev, $patient_name, $invnumber, $service_date, $code, $bgcolor);
             $got_response = false;
             foreach ($prev['dtl'] as $ddata) {
-                if (($ddata['pmt'] || $ddata['rsn']) && $ddata['plv']==$currentlevel['last_level_billed']) $got_response = true;
+                if (($ddata['pmt'] || $ddata['rsn']) && ($ddata['plv']==$currentlevel['last_level_billed'] || $ddata['plv']==0)) $got_response = true;
             }
             if (!$got_response) $insurance_done = false;
         }

@@ -243,12 +243,13 @@ function QueueToNextLevel()
 		if(trim(formData('type_name'   ))!='patient')
 		 {
 			$currentlevel = sqlQuery("select last_level_billed from form_encounter where pid=".trim(formData('hidden_patient_code' ))." and encounter=".$EncounterRowArray[$RowIndex]);
-			 $codes = ar_get_invoice_summary(trim(formData('hidden_patient_code' )), $EncounterRowArray[$RowIndex], true);
+			$codes = ar_get_invoice_summary(trim(formData('hidden_patient_code' )), $EncounterRowArray[$RowIndex], true);
 		     $insurance_done = true;
-		     foreach ($codes as $code => $prev) {
-			    $got_response = false;
+			 $insurance_done = true;
+			 foreach ($codes as $code => $prev) {
+			    $got_response = false;				
 			    foreach ($prev['dtl'] as $ddata) {
-			       if (($ddata['pmt'] || $ddata['rsn']) && $ddata['plv']==$currentlevel['last_level_billed']) $got_response = true;
+					if (($ddata['pmt'] || $ddata['rsn']) && ($ddata['plv']==$currentlevel['last_level_billed'] || $ddata['plv']==0)) $got_response = true;
 			    }
 			    if (!$got_response) $insurance_done = false;
 		     }
