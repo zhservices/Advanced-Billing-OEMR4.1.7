@@ -40,12 +40,12 @@
   }
   if ($count) {
    $query = "DELETE FROM $table WHERE $where";
-   $row = sqlQuery("SELECT * FROM form_encounter WHERE ".$where);
    if($table=='form_encounter' && ($GLOBALS['external_module_path'] && $GLOBALS['external_module_username'] && $GLOBALS['external_module_password'])){
+   $row = sqlQuery("SELECT * FROM form_encounter WHERE ".$where);
    UpdateDeletedEncounter($row['pid'],$row['encounter']);
+   }
    echo $query . "<br>\n";
    sqlStatement($query);
-   }
   }
  }
  // Deactivate rows, with logging, for the specified table using the
