@@ -29,7 +29,7 @@ if($query_from_file[strlen($query_from_file)-1]!=';')
   echo "None of the databases are altered.<br>Reason==>Each query should end with a semi colon(;) <b>including the last one</b>.";
   die;
  }
- $queries = preg_split("/;+(?=([^'|^\\\']*['|\\\'][^'|^\\\']*['|\\\'])*[^'|^\\\']*[^'|^\\\']$)/", $query_from_file);
+ $queries = explode(";", $query_from_file);
  $querycount=0;
 	foreach ($queries as $query)
 	 {
