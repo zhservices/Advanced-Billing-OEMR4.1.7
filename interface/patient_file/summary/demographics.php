@@ -803,6 +803,12 @@ if ( $insurance_count > 0 ) {
 								  <span class='bold'><?php echo htmlspecialchars(xl('Secondary Medicare Type'),ENT_NOQUOTES); ?>: </span>
 								  <span class='text'><?php echo htmlspecialchars($policy_types[$row['policy_type']],ENT_NOQUOTES); ?></span>
 							<?php } ?>
+								  <span class='bold'><?php echo htmlspecialchars(xl('Auth Required'),ENT_NOQUOTES); ?>:</span>
+								  <span class='text'>
+									<?php if($row['auth_required'] == "0") echo xl("No"); ?>
+									<?php if($row['auth_required'] == "1") echo xl("Yes"); ?>
+									<?php if($row['auth_required'] == "2" || $row['auth_required'] == "" ) echo xl("Not Updated"); ?>
+								  </span>
 								 </td>
 								 <td valign='top'></td>
 								 <td valign='top'></td>
