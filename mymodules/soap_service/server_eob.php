@@ -318,6 +318,13 @@ class eob{
                 if($pat_bal_result[$row['pid']]['ar_responsible_party'] == 0 || !$pat_bal_summary){
 
                     $balance = sprintf("%.2f", $row['charges'] + $row['copays']  - $row['copays_ar'] - $row['payments'] - $row['adjustments']);
+                    $duncount = 0;
+                    if (! $duncount) {
+                        for ($i = 1; $i <= 3 && arGetPayerID($row['pid'], $row['date'], $i); ++$i) ;
+                        $duncount = $row['last_level_closed'] + 1 - $i;
+                    }
+                    $isdueany = ($balance != 0);
+                    if($duncount <  0 || !$isdueany) continue;
                     $pat_bal_result[$row['pid']]['charges'] += $row['charges'];
                     $pat_bal_result[$row['pid']]['copays'] += $row['copays'];
                     $pat_bal_result[$row['pid']]['copays_ar'] += $row['copays_ar'];

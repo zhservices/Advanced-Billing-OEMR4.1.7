@@ -260,6 +260,7 @@ function QueueToNextLevel()
 			//multiple charges can come.Now not needed.
 			fwrite($fh,"pamentINC line no231 beforeIF pid--".trim(formData('hidden_patient_code' ))."encounter--".$EncounterRowArray[$RowIndex]."inslevel".$InsRowArray[$RowIndex]."\r\n");
 			if($ferow['last_level_closed']<$InsRowArray[$RowIndex])
+			
 			 {
 				sqlStatement("update form_encounter set last_level_closed='".$InsRowArray[$RowIndex]."' where 
 				pid ='".trim(formData('hidden_patient_code' ))."' and encounter='".$EncounterRowArray[$RowIndex]."'");

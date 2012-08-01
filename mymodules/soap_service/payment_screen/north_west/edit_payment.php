@@ -720,7 +720,7 @@ return false;
   ?>
 ' style="display:inline" >
  <input type="hidden" name="screen" value="<?php echo $_REQUEST['screen'];?>">
-<table width="958" border="0"  cellspacing="0" cellpadding="0">
+<table width="100%" border="0"  cellspacing="0" cellpadding="0">
 <?php
   if($_REQUEST['ParentPage']=='new_payment')
   {
@@ -774,8 +774,8 @@ return false;
   {//Distribution rows already in the database are displayed.
   ?>
 
-<table width="958" border="0" cellspacing="0" cellpadding="10" bgcolor="#DEDEDE"><tr><td>
-	<table width="936" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="10" bgcolor="#DEDEDE"><tr><td>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 
 		  <tr>
 			<td colspan="13" align="left" >
@@ -820,7 +820,7 @@ return false;
 						 {
 						 $Table='yes';
 						?>
-						<table width="958"  border="0" cellpadding="0" cellspacing="0" align="center" id="TableDistributePortion">
+						<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" id="TableDistributePortion">
 						  <tr class="text" bgcolor="#dddddd">
 						    <td width="25" class="left top" >&nbsp;</td>
 						    <td width="144" class="left top" ><?php echo htmlspecialchars( xl('Patient Name'), ENT_QUOTES) ?></td>

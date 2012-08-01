@@ -369,8 +369,8 @@ return false;
  if($payment_id*1>0)
   {
   ?>
-<table width="958" border="0" cellspacing="0" cellpadding="10" bgcolor="#DEDEDE"><tr><td>
-	<table width="936" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="10" bgcolor="#DEDEDE"><tr><td>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 	  <tr>
 		<td colspan="13" align="left" >
 				<!--Distribute section-->

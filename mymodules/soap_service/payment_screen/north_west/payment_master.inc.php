@@ -136,8 +136,8 @@ if($payment_id>0)
 if(($screen=='new_payment' && $payment_id*1==0) || ($screen=='edit_payment' && $payment_id*1>0))
  {//New entry or edit in edit screen comes here.
 ?>
-<table width="958" border="0" cellspacing="0" cellpadding="10" bgcolor="#DEDEDE"><tr><td>
-	<table width="936" border="0" style="border:1px solid black" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="10" bgcolor="#DEDEDE"><tr><td>
+	<table width="100%" border="0" style="border:1px solid black" cellspacing="0" cellpadding="0">
 	  <tr height="5">
 		<td colspan="14" align="left" ></td>
 	  </tr>
@@ -337,15 +337,15 @@ if(($screen=='new_payment' && $payment_id*1==0) || ($screen=='edit_payment' && $
 if($screen=='new_payment' && $payment_id*1>0)
  {//After saving from the New Payment screen,all values are  showed as labels.The date picker images are also removed.
 ?>
-<table width="958" border="0" cellspacing="0" cellpadding="10" bgcolor="#DEDEDE"><tr><td align="left">
-	<table width="936" border="0" style="border:1px solid black" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="10" bgcolor="#DEDEDE"><tr><td align="left">
+	<table width="100%" border="0" style="border:1px solid black" cellspacing="0" cellpadding="0">
 	  <tr height="5">
 		<td colspan="13" align="left" ></td>
 	  </tr>
 	  <tr>
 		<td colspan="13" align="left" >
 
-			<table width="936" border="0"  cellspacing="0" cellpadding="0" align="left">
+			<table width="100%" border="0"  cellspacing="0" cellpadding="0" align="left">
 				  <tr>
 					<td colspan="13" align="left">&nbsp;<font class='title'><?php echo htmlspecialchars( xl('Batch Payment Entry'), ENT_QUOTES) ?></font></td>
 				  </tr>

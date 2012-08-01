@@ -100,10 +100,10 @@ if (isset($_POST["mode"]))
  }
 //===============================================================================
 ?>
-<table width="938" border="0" cellspacing="0" cellpadding="0"  id="TablePatientPortion">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  id="TablePatientPortion">
 	  <tr height="5">
 		<td colspan="13" align="left" >
-			<table width="938" border="0" cellspacing="0" cellpadding="0" bgcolor="#DEDEDE">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#DEDEDE">
 			  <tr height="5">
 				<td class='title' width="700" ></td>
 			  </tr>
@@ -159,7 +159,7 @@ if (isset($_POST["mode"]))
 			if($RowSearch = sqlFetchArray($ResultSearchNew))
 			 {
 			?>
-			<table width="938"  border="0" cellpadding="0" cellspacing="0" align="center" id="TableDistributePortion">
+			<table width="100%"  border="0" cellpadding="0" cellspacing="0" align="center" id="TableDistributePortion">
 			  <tr class="text" height="10">
 			    <td colspan="14"></td>
 		      </tr>

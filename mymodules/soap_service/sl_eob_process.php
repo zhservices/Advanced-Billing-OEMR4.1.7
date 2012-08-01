@@ -131,8 +131,8 @@ global $debug,$InsertionId,$paydate,$cred;
             else
              {
                 $bgcolor='#ffdddd';
-             }
-             $rs=sqlQ("select reference from ar_session where reference='".$out['check_number'.$check_count]."'");
+             }             
+             $rs=sqlQ("select reference from ar_session where reference like '%".$out['check_number'.$check_count]."'");
              if(sqlNumRows($rs)>0)
              {
                 $bgcolor='#ff0000';
@@ -515,7 +515,7 @@ global $debug,$InsertionId,$paydate,$cred;
             if($rsncode<>'227'){//these should not be adjusted. Have to contact patient then decide
               arPostAdjustment($pid, $encounter, $InsertionId[$out['check_number']],0,//$InsertionId[$out['check_number']] gives the session id
                 $codekey, substr($inslabel,3),
-                "Adjust code " . $adj['reason_code'], $debug);
+                $reason, $debug);
                 }
            else{  //these codes are not actual adjustments But denial so we are dealing in that way Eldho Feb 23,2011
             $code_value = substr($code_value,0,-1);

@@ -88,7 +88,7 @@ class UserService Extends FeeSheet
 	}
     }
     static function ClaimErrormsg($pid,$encounter_date){
-      $query = "SELECT pd.pubpid, pd.lname, pd.mname, pd.fname, pd.dob, pd.onset_hospitaliztion AS onset_date, " .
+      $query = "SELECT pd.pubpid, pd.lname, pd.mname, pd.fname, pd.dob, " .
 	  "pd.street, pd.city, pd.state, pd.postal_code, pd.phone_home, insd.provider AS primary_ins, " .
 	  "insd.policy_number, insd.subscriber_lname, insd.subscriber_fname, insd.subscriber_sex, " . 
 	  "insd.subscriber_dob, insd.subscriber_street, insd.subscriber_city, insd.subscriber_state, " .
