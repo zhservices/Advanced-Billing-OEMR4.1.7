@@ -331,8 +331,8 @@ class UserService Extends FeeSheet
 		      // This preserves any existing insurance company selection, which is
 		      // important when EOB posting has re-queued for secondary billing.
 		      $resultset[$i]['InsDDL'][strtoupper(substr($row12['type'],0,1)) . $row12['id']] = substr($row12['type'],0,3) . ": " . $row12['provider'];
-		      if (!is_numeric($default_x12_partner)) $resultset[$i]['default_x12_partner'] = $row12['ic_x12id'];
-		      $resultset[$i]['default_x12_partner_name'] = $row12['x12_name'];
+		      if (!is_numeric($default_x12_partner)) $resultset[$i]['default_x12_partner'][strtoupper(substr($row12['type'],0,1)) . $row12['id']] = $row12['ic_x12id'];
+		      $resultset[$i]['default_x12_partner_name'][strtoupper(substr($row12['type'],0,1)) . $row12['id']] = $row12['x12_name'];
 		    }
 		  }
 		  $query = "SELECT DISTINCT name, id FROM x12_partners ORDER BY name";
